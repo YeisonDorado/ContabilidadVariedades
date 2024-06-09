@@ -6,6 +6,7 @@ import json
 from waitress import serve
 
 from Controladores.ControladorCategoria import ControladorCategoria
+from Controladores.ControladorIngreso import ControladorIngreso
 
 app=Flask(__name__)
 """
@@ -21,7 +22,7 @@ Implementacion de los controladores--------------------------------
 
 
 miControladorCategoria=ControladorCategoria()
-
+miControladorIngreso=ControladorIngreso()
 
 
 """
@@ -55,6 +56,46 @@ def eliminarCategoria(id):
     json=miControladorCategoria.delete(id)
     return jsonify(json)
 
+
+"""
+----------------------------------------------SERVICIOS INGRESOS___________________________________________________________________________
+"""
+
+@app.route("/ingresos",methods=['GET'])
+def getIngresos():
+    json=miControladorIngreso.index()
+    return jsonify(json)
+
+@app.route("/ingresos",methods=['POST'])
+def crearIngreso():
+    data = request.get_json()
+    json=miControladorIngreso.create(data)
+    return jsonify(json)
+
+@app.route("/ingresos/<string:id>",methods=['GET'])
+def getIngreso(id):
+    json=miControladorIngreso.show(id)
+    return jsonify(json)
+
+@app.route("/ingresos/<string:id>",methods=['PUT'])
+def modificarIngreso(id):
+    data = request.get_json()
+    json=miControladorIngreso.update(id,data)
+    return jsonify(json)
+
+@app.route("/ingresos/<string:id>",methods=['DELETE'])
+def eliminarIngreso(id):
+    json=miControladorIngreso.delete(id)
+    return jsonify(json)
+
+"""
+metodo de relacion categoria  - ingresos
+"""
+
+@app.route("/ingresos/<string:id>/categoria/<string:id_categoria>", methods=['PUT'])
+def asignarCategoriaAIngreso(id, id_categoria):
+    json = miControladorIngreso.asignarCategoria(id, id_categoria)
+    return jsonify(json)
 
 
 
