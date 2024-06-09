@@ -7,6 +7,7 @@ from waitress import serve
 
 from Controladores.ControladorCategoria import ControladorCategoria
 from Controladores.ControladorIngreso import ControladorIngreso
+from Controladores.ControladorEgreso import ControladorEgreso
 
 app=Flask(__name__)
 """
@@ -23,6 +24,7 @@ Implementacion de los controladores--------------------------------
 
 miControladorCategoria=ControladorCategoria()
 miControladorIngreso=ControladorIngreso()
+miControladorEgreso=ControladorEgreso()
 
 
 """
@@ -97,6 +99,46 @@ def asignarCategoriaAIngreso(id, id_categoria):
     json = miControladorIngreso.asignarCategoria(id, id_categoria)
     return jsonify(json)
 
+
+"""
+----------------------------------------------SERVICIOS EGRESOS___________________________________________________________________________
+"""
+
+@app.route("/egresos",methods=['GET'])
+def getEgresos():
+    json=miControladorEgreso.index()
+    return jsonify(json)
+
+@app.route("/egresos",methods=['POST'])
+def crearEgreso():
+    data = request.get_json()
+    json=miControladorEgreso.create(data)
+    return jsonify(json)
+
+@app.route("/egresos/<string:id>",methods=['GET'])
+def getEgreso(id):
+    json=miControladorEgreso.show(id)
+    return jsonify(json)
+
+@app.route("/egresos/<string:id>",methods=['PUT'])
+def modificarEgreso(id):
+    data = request.get_json()
+    json=miControladorEgreso.update(id,data)
+    return jsonify(json)
+
+@app.route("/egresos/<string:id>",methods=['DELETE'])
+def eliminarEgreso(id):
+    json=miControladorEgreso.delete(id)
+    return jsonify(json)
+
+"""
+metodo de relacion categoria  - Egresos
+"""
+
+@app.route("/egresos/<string:id>/categoria/<string:id_categoria>", methods=['PUT'])
+def asignarCategoriaAEgreso(id, id_categoria):
+    json = miControladorEgreso.asignarCategoria(id, id_categoria)
+    return jsonify(json)
 
 
 
